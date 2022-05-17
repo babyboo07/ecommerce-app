@@ -1,0 +1,123 @@
+const accountData = [{
+    "id": 1,
+    "fullName": "Roley Pesak",
+    "userName": "rpesak0",
+    "password": "Wur1LD",
+    "phone": "712-962-0781",
+    "email": "rpesak0@ucla.edu",
+    "address": "1253 Lotheville Place",
+    "dob": "7/10/2019",
+    "gender": "Male",
+    "role": 1,
+    "image": "http://dummyimage.com/227x100.png/ff4444/ffffff"
+}, {
+    "id": 2,
+    "fullName": "Clayton Wonfar",
+    "userName": "cwonfar1",
+    "password": "awwnZ2D",
+    "phone": "548-242-1047",
+    "email": "cwonfar1@biblegateway.com",
+    "address": "0151 Main Point",
+    "dob": "1/11/2002",
+    "gender": "Male",
+    "role": 2,
+    "image": "http://dummyimage.com/248x100.png/dddddd/000000"
+}, {
+    "id": 3,
+    "fullName": "Quintus Feedham",
+    "userName": "qfeedham2",
+    "password": "pNXxs0",
+    "phone": "420-280-4434",
+    "email": "qfeedham2@biglobe.ne.jp",
+    "address": "43 Straubel Terrace",
+    "dob": "4/24/2006",
+    "gender": "Agender",
+    "role": 3,
+    "image": "http://dummyimage.com/139x100.png/ff4444/ffffff"
+}, {
+    "id": 4,
+    "fullName": "Theodosia Bonner",
+    "userName": "tbonner3",
+    "password": "IjRO4YcLso",
+    "phone": "643-370-6732",
+    "email": "tbonner3@fc2.com",
+    "address": "68 Shoshone Court",
+    "dob": "12/21/2014",
+    "gender": "Female",
+    "role": 4,
+    "image": "http://dummyimage.com/112x100.png/dddddd/000000"
+}, {
+    "id": 5,
+    "fullName": "Trina Caltun",
+    "userName": "tcaltun4",
+    "password": "WxTkPRYlvoi",
+    "phone": "591-951-4367",
+    "email": "tcaltun4@wordpress.com",
+    "address": "53 Katie Park",
+    "dob": "10/30/2020",
+    "gender": "Non-binary",
+    "role": 5,
+    "image": "http://dummyimage.com/129x100.png/cc0000/ffffff"
+}, {
+    "id": 6,
+    "fullName": "Colette Eykelbosch",
+    "userName": "ceykelbosch5",
+    "password": "JuSevGQRWa5W",
+    "phone": "329-299-9629",
+    "email": "ceykelbosch5@instagram.com",
+    "address": "57769 Norway Maple Drive",
+    "dob": "12/24/2015",
+    "gender": "Female",
+    "role": 6,
+    "image": "http://dummyimage.com/174x100.png/5fa2dd/ffffff"
+}, {
+    "id": 7,
+    "fullName": "Justina Enrigo",
+    "userName": "jenrigo6",
+    "password": "mLYZ6D",
+    "phone": "382-889-3398",
+    "email": "jenrigo6@flickr.com",
+    "address": "9 Northview Point",
+    "dob": "11/12/2000",
+    "gender": "Female",
+    "role": 7,
+    "image": "http://dummyimage.com/214x100.png/5fa2dd/ffffff"
+}, {
+    "id": 8,
+    "fullName": "Min Riping",
+    "userName": "mriping7",
+    "password": "pGvv2YqgpG2",
+    "phone": "547-676-6035",
+    "email": "mriping7@accuweather.com",
+    "address": "3245 Steensland Crossing",
+    "dob": "4/17/2003",
+    "gender": "Female",
+    "role": 8,
+    "image": "http://dummyimage.com/237x100.png/cc0000/ffffff"
+}, {
+    "id": 9,
+    "fullName": "Waldemar Barette",
+    "userName": "wbarette8",
+    "password": "5gzNI0",
+    "phone": "228-830-7001",
+    "email": "wbarette8@columbia.edu",
+    "address": "0480 Merry Street",
+    "dob": "7/6/2024",
+    "gender": "Agender",
+    "role": 9,
+    "image": "http://dummyimage.com/232x100.png/dddddd/000000"
+}, {
+    "id": 10,
+    "fullName": "Tobe Gajewski",
+    "userName": "tgajewski9",
+    "password": "yojHTXN",
+    "phone": "799-587-9788",
+    "email": "tgajewski9@examiner.com",
+    "address": "37792 Merchant Crossing",
+    "dob": "11/29/2001",
+    "gender": "Female",
+    "role": 10,
+    "image": "http://dummyimage.com/242x100.png/ff4444/ffffff"
+}]
+
+export default accountData;
