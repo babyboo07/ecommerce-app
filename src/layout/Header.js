@@ -7,6 +7,7 @@ import { useEffect } from "react";
 const { Header } = Layout;
 
 const HeaderLayout = (props) => {
+
     useEffect(() => {
         let el = document.getElementById('root');
         if (el.clientWidth <= 600) {

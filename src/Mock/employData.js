@@ -1,4 +1,4 @@
-const EmployData = [{
+const employData = [{
     "id": 1,
     "fullName": "Athena Pither",
     "email": "apither0@squidoo.com",
@@ -90,4 +90,4 @@ const EmployData = [{
     "role": 10
 }]
 
-export default EmployData;
+export default employData;

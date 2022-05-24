@@ -1,7 +1,9 @@
-import { Button, Form, Input, Select, Upload } from "antd";
+import { Button, DatePicker, Form, Input, Select, Upload } from "antd";
 import BreadcrumbCommon from "../Common/BreadcrumbCommon";
 import { PlusOutlined } from '@ant-design/icons';
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import accountData from "../Mock/accountData";
 
 
 const normFile = (e) => {
@@ -23,7 +25,7 @@ const tailLayout = {
 const { Option } = Select;
 
 const AccountEdit = () => {
-    const [img, setImg] = useState(null);
+    const [img, setImg] = useState([]);
 
     const beforeUpload = (file) => {
         const isImg = file.type.includes('image');
@@ -43,16 +45,22 @@ const AccountEdit = () => {
 
     const onFinish = (values) => {
         values.image = img
-        
+
         console.log('Success:', values);
     };
 
     const uploadButton = (
-      <div>
-        <PlusOutlined />
-        <div style={{ marginTop: 8 }}>Upload</div>
-      </div>
+        <div>
+            <PlusOutlined />
+            <div style={{ marginTop: 8 }}>Upload</div>
+        </div>
     );
+
+    const [account, setAccount] = useState(null);
+    const { id } = useParams();
+    useEffect(() => {
+        setAccount(accountData.filter(p => { return p.id === parseInt(id) })[0]);
+    })
 
     return (
         <div>
@@ -79,44 +87,47 @@ const AccountEdit = () => {
                         <Input />
                     </Form.Item>
                     <Form.Item
-                        label="UserName"
-                        name="userName"
-                        rules={[{
-                            required: true, message: "Input somethings bro!!"
-                        }]}
-                    >
-                        <Input />
-                    </Form.Item>
-                    <Form.Item
                         label="Password"
                         name="password"
                         rules={[{
                             required: true, message: "Input Input something bro!!"
                         }]}
                     >
-                        <Input.Password disabled={true}  />
+                        <Input.Password />
                     </Form.Item>
                     <Form.Item
                         label="Phone Number"
                         name="phone"
-                        rules={[{
-                            required: true, message: "Input Input something bro!!"
-                        }]}
+                        rules={[
+                            {
+                                required: true, message: "Input Input something bro!!"
+                            },
+                            {
+                                pattern: new RegExp(/(0[3|5|7|8|9])+([0-9]{8})\b/),
+                                message: 'This is not phone number format'
+                            }
+                        ]}
                     >
                         <Input />
                     </Form.Item>
                     <Form.Item
                         label="Email"
                         name="email"
-                        rules={[{
-                            required: true, message: "Input Input something bro!!"
-                        }]}
+                        rules={[
+                            {
+                                required: true, message: "Input Input something bro!!"
+                            },
+                            {
+                                pattern: new RegExp(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/),
+                                message: 'This is not email format'
+                            }
+                        ]}
                     >
                         <Input />
                     </Form.Item>
                     <Form.Item
                         label="Address"
-                        name="Address"
+                        name="address"
                         rules={[{
                             required: true, message: "Input Input something bro!!"
                         }]}
@@ -130,7 +141,7 @@ const AccountEdit = () => {
                             required: true, message: "Input Input something bro!!"
                         }]}
                     >
-                        <Input />
+                        <DatePicker />
                     </Form.Item>
                     <Form.Item
                         label="Gender"
@@ -139,7 +150,11 @@ const AccountEdit = () => {
                             required: true, message: "Input Input something bro!!"
                         }]}
                     >
-                        <Input />
+                        <Select>
+                            <Option value={true}>Male</Option>
+                            <Option value={false}>Female</Option>
+                            <Option value="">Other</Option>
+                        </Select>
                     </Form.Item>
                     <Form.Item
                         label="Role"
@@ -149,12 +164,8 @@ const AccountEdit = () => {
                         }]}
                     >
                         <Select>
-                            <Option value="jack">Jack</Option>
-                            <Option value="lucy">Lucy</Option>
-                            <Option value="disabled" disabled>
-                                Disabled
-                            </Option>
-                            <Option value="Yiminghe">yiminghe</Option>
+                            <Option value={1}>Admin</Option>
+                            <Option value={2}>Employ</Option>
                         </Select>
                     </Form.Item>
                     <Form.Item label="Image"
@@ -163,7 +174,7 @@ const AccountEdit = () => {
                             required: true, message: "Input Input something bro!!"
                         }]}
                         getValueFromEvent={normFile}
-                        valuePropName="fileList" 
+                        valuePropName="fileList"
                     >
                         <Upload accept="image/*" beforeUpload={beforeUpload}
                             listType="picture-card"

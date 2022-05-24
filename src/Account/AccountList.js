@@ -1,13 +1,25 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Modal, Table } from "antd";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import BreadcrumbCommon from "../Common/BreadcrumbCommon";
-import accountData from "../Mock/accountData";
 import { faTrashCan, faPen } from '@fortawesome/free-solid-svg-icons'
 import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { destroyUser, getUser } from "../Redux/admin/actions";
+import { getUserSelector } from "../Redux/admin/selectors";
+import siteConfig from "../siteConfig";
 
 const AccountList = () => {
+    const {id} = useParams()
+    const dispatch = useDispatch();
+    const userData = useSelector(getUserSelector);
     const { confirm } = Modal;
+    const {users } = userData;
+
+    useEffect(()=>{
+        dispatch(getUser());
+    }, [])
 
     const showDeleteConfirm = () => {
         confirm({
@@ -21,6 +33,7 @@ const AccountList = () => {
                 console.log('Cancel');
             },
             onOk() {
+                dispatch(destroyUser({id:id}));
                 console.log('OK');
             },
         });
@@ -62,8 +75,16 @@ const AccountList = () => {
         },
         {
             title: 'Role',
-            dataIndex: 'role',
+            dataIndex: 'roleName',
+            key: 'id'
+        },
+        {
+            title: 'Image',
+            dataIndex: 'imgPath',
             key: 'id',
+            render: (val) => (
+                <img width={100} height={100} src={siteConfig.apiRoot + val} />
+            )
         },
         {
             title: "Action",
@@ -77,6 +98,7 @@ const AccountList = () => {
             }
         }
     ]
+
     return (
         <div>
             <div>
@@ -90,7 +112,7 @@ const AccountList = () => {
                 </Link>
             </div>
             <div className="pt-4">
-                <Table columns={col} rowKey={'id'} dataSource={accountData} />
+                <Table columns={col} rowKey={'id'} dataSource={users} />
             </div>
         </div>
     );

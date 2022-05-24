@@ -1,13 +1,19 @@
-import { Button, Form, Input, Select } from "antd";
+import { Button, Form, Input, Select, Upload } from "antd";
+import { useState } from "react";
 import BreadcrumbCommon from "../Common/BreadcrumbCommon";
+import { PlusOutlined } from '@ant-design/icons';
 
 const { Option } = Select;
 
-const ProductCreate = () => {
+const normFile = (e) => {
+    if (Array.isArray(e)) {
+        return e;
+    }
 
-    const onFinish = (values) => {
-        console.log('Success:', values);
-    };
+    return e && e.fileList;
+};
+
+const ProductCreate = () => {
 
     const onFinishFailed = (errorInfo) => {
         console.log('Failed:', errorInfo);
@@ -15,12 +21,43 @@ const ProductCreate = () => {
 
     const tailLayout = {
         wrapperCol: { offset: 14, span: 16 },
-      };
+    };
+
+    const [img, setImg] = useState(null);
+
+    const beforeUpload = (file) => {
+        const isImg = file.type.includes('image');
+
+        if (isImg) {
+            var reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = function () {
+                setImg(reader.result)
+            };
+        } else {
+            setImg(null)
+        }
+
+        return false;
+    }
+
+    const onFinish = (values) => {
+        values.image = img
+
+        console.log('Success:', values);
+    };
+
+    const uploadButton = (
+        <div>
+            <PlusOutlined />
+            <div style={{ marginTop: 8 }}>Upload</div>
+        </div>
+    );
 
     return (
         <div>
             <div>
-                <BreadcrumbCommon header={'Product'} title={'Add'}/>
+                <BreadcrumbCommon header={'Product'} title={'Add'} />
             </div>
             <div className="pt-4">
                 <Form
@@ -80,6 +117,21 @@ const ProductCreate = () => {
                         }]}
                     >
                         <Input />
+                    </Form.Item>
+                    <Form.Item label="Image"
+                        name="image"
+                        rules={[{
+                            required: true, message: "Input Input something bro!!"
+                        }]}
+                        getValueFromEvent={normFile}
+                        valuePropName="fileList"
+                    >
+                        <Upload accept="image/*" beforeUpload={beforeUpload}
+                            listType="picture-card"
+                            className="avatar-uploader"
+                            showUploadList={false}>
+                            {img ? <img src={img} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
+                        </Upload>
                     </Form.Item>
                     <Form.Item {...tailLayout}>
                         <Button className="btn-success" htmlType="submit">
