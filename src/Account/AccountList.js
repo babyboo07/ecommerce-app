@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, Modal, Table } from "antd";
-import { Link, useParams } from "react-router-dom";
+import { Button, message, Modal, Table } from "antd";
+import { Link, useNavigate } from "react-router-dom";
 import BreadcrumbCommon from "../Common/BreadcrumbCommon";
 import { faTrashCan, faPen } from '@fortawesome/free-solid-svg-icons'
 import { ExclamationCircleOutlined } from '@ant-design/icons';
@@ -11,30 +11,40 @@ import { getUserSelector } from "../Redux/admin/selectors";
 import siteConfig from "../siteConfig";
 
 const AccountList = () => {
-    const {id} = useParams()
     const dispatch = useDispatch();
     const userData = useSelector(getUserSelector);
-    const { confirm } = Modal;
-    const {users } = userData;
+    const navigate = useNavigate();
+    
+    const { users } = userData;
 
-    useEffect(()=>{
+    useEffect(() => {
         dispatch(getUser());
     }, [])
 
-    const showDeleteConfirm = () => {
+    const showDeleteConfirm = (id) => {
+        const { confirm } = Modal;
         confirm({
-            title: 'Are you sure delete this task?',
+            title: 'Do you Want to delete these items ' + id +'?',
             icon: <ExclamationCircleOutlined />,
             content: 'Some descriptions',
-            okText: 'Yes',
-            okType: 'danger',
-            cancelText: 'No',
-            onCancel() {
-                console.log('Cancel');
-            },
             onOk() {
                 dispatch(destroyUser({id:id}));
-                console.log('OK');
+                message.success({
+                    content: 'Delete success!',
+                    className: 'custom-class',
+                    style: {
+                        marginTop: '6vh',
+                    },
+                })
+            },
+            onCancel() {
+                message.error({
+                    content: 'Delete error!',
+                    className: 'custom-class',
+                    style: {
+                        marginTop: '6vh'
+                    }
+                })
             },
         });
     }
@@ -92,7 +102,7 @@ const AccountList = () => {
                 return (
                     <>
                         <Link className="btn mr-3" to={"/account/edit/" + val.id}><FontAwesomeIcon icon={faPen} color="#ffc107" /></Link>
-                        <Button className="btn mr-1" onClick={showDeleteConfirm}><FontAwesomeIcon icon={faTrashCan} color="#dc3545" /></Button>
+                        <Button className="btn mr-1" onClick={() => showDeleteConfirm(val.id)}><FontAwesomeIcon icon={faTrashCan} color="#dc3545" /></Button>
                     </>
                 )
             }

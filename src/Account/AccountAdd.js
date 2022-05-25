@@ -6,29 +6,13 @@ import { useDispatch } from "react-redux";
 import { addUser } from "../Redux/admin/actions";
 import { useNavigate, useParams } from "react-router-dom";
 
-const normFile = (e) => {
-    if (Array.isArray(e)) {
-        return e;
-    }
-
-    return e && e.fileList;
-};
-
-const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
-};
-
-const tailLayout = {
-    wrapperCol: { offset: 14, span: 16 },
-};
-
 const { Option } = Select;
 
 const AccountAdd = () => {
     const [img, setImg] = useState(null);
     const dispatch = useDispatch();
     const navigation = useNavigate();
-    const {id} = useParams();
+    const { id } = useParams();
 
     const beforeUpload = (file) => {
         const isImg = file.type.includes('image');
@@ -46,10 +30,26 @@ const AccountAdd = () => {
         return false;
     }
 
+    const normFile = (e) => {
+        if (Array.isArray(e)) {
+            return e;
+        }
+
+        return e && e.fileList;
+    };
+
+    const onFinishFailed = (errorInfo) => {
+
+        console.log('Failed:', errorInfo);
+    };
+
+    const tailLayout = {
+        wrapperCol: { offset: 14, span: 16 },
+    };
+
     const onFinish = (values) => {
         values.image = img;
-        dispatch(addUser(values));
-        navigation('/account')
+        dispatch(addUser(values, navigation));
     };
 
     const uploadButton = (
@@ -143,14 +143,14 @@ const AccountAdd = () => {
                     <Form.Item
                         label="Gender"
                         name="gender"
-                        rules={[{
-                            required: true, message: "Input Input something bro!!"
-                        }]}
+                        // rules={[{
+                        //     required: true, message: "Input Input something bro!!"
+                        // }]}
                     >
                         <Select>
-                            <Option value={true}>Male</Option>
-                            <Option value={false}>Female</Option>
-                            <Option value="">Other</Option>
+                            <Option value={1}>Male</Option>
+                            <Option value={0}>Female</Option>
+                            <Option value={2}>Other</Option>
                         </Select>
                     </Form.Item>
                     <Form.Item

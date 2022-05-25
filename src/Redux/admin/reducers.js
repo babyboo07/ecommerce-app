@@ -1,12 +1,20 @@
-import { ADD_USER, 
-    ADD_USER_FAILURE, 
-    ADD_USER_SUCCESS, 
-    DESTROY_USER, 
-    DESTROY_USER_FAILURE, 
-    DESTROY_USER_SUCCESS, 
-    GET_USER, 
-    GET_USER_FAILURE, 
-    GET_USER_SUCCESS } from "./actions";
+import {
+    ADD_USER,
+    ADD_USER_FAILURE,
+    ADD_USER_SUCCESS,
+    DESTROY_USER,
+    DESTROY_USER_FAILURE,
+    DESTROY_USER_SUCCESS,
+    EDIT_USER,
+    EDIT_USER_FAILURE,
+    EDIT_USER_SUCCESS,
+    GET_USER,
+    GET_USER_FAILURE,
+    GET_USER_SUCCESS,
+    SHOW_USER,
+    SHOW_USER_FAILURE,
+    SHOW_USER_SUCCESS
+} from "./actions";
 
 const initialState = {
     pending: false,
@@ -16,55 +24,78 @@ const initialState = {
 };
 
 
-export default (state = initialState,action)=>{
-    switch(action.type){
+export default (state = initialState, action) => {
+    switch (action.type) {
         case GET_USER:
-            return{
+            return {
                 ...state,
             };
         case GET_USER_SUCCESS:
-            return{
+            return {
                 ...state,
                 users: action.payload,
             };
         case GET_USER_FAILURE:
-            return{
+            return {
                 ...state,
-                users:[]
+                users: []
             };
         case ADD_USER:
-            return{
-                ...state,
-                users: action
+            return {
+                ...state
             };
         case ADD_USER_SUCCESS:
-            return{
-                ...state,
-                users:action.payload
+            return {
+                ...state
             };
         case ADD_USER_FAILURE:
-            return{
-                ...state,
-                users:[]
+            return {
+                ...state
             };
         case DESTROY_USER:
-            return{
+            return {
                 ...state,
             };
         case DESTROY_USER_SUCCESS:
-            return{
+            return {
                 ...state,
-                destroyUser:action.payload
+                destroyUser: action.payload
             };
         case DESTROY_USER_FAILURE:
-            return{
+            return {
                 ...state,
-                users:[]
+                users: []
+            };
+        case SHOW_USER:
+            return {
+                ...state,
+            }
+        case SHOW_USER_SUCCESS:
+            return {
+                ...state,
+                detailUser: action.payload
+            };
+        case SHOW_USER_FAILURE:
+            return {
+                ...state,
+                detailUser: [],
+            };
+        case EDIT_USER:
+            return {
+                ...state,
+            };
+        case EDIT_USER_SUCCESS:
+            return {
+                ...state
+            };
+        case EDIT_USER_FAILURE:
+            return {
+                ...state
             };
         default:
-            return{
+            return {
                 ...state,
             };
-        
+
     }
 }

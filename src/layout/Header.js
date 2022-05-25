@@ -60,7 +60,9 @@ const HeaderLayout = (props) => {
         >
             <div className="col-12 row">
                 <div className="col-7">
-                    <FontAwesomeIcon className="ms-3" icon={faAlignLeft} size="lg" onClick={() => props.setIsCollapse(!props.isCollapse)} />
+                    <FontAwesomeIcon className="ms-3" 
+                        style={{ cursor: 'pointer' }} 
+                        icon={faAlignLeft} size="lg" onClick={() => props.setIsCollapse(!props.isCollapse)} />
                 </div>
                 <div className="col-5 bd-highlight text-end">
                     <Dropdown overlay={menu}>
