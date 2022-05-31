@@ -42,3 +42,33 @@
   display: flex;
   align-items: center;
 }
+
+.fileList {
+  margin-top: 5px;
+  width: 422px;
+  border: thin solid #cecece;
+  border-radius: 5px;
+  list-style: none;
+  padding: 0;
+  grid-template-columns: repeat(3, 1fr);
+  display: grid;
+  overflow-y: auto;
+}
+
+.fileList .fileItem img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  grid-column-end: span 1;
+  grid-row-end: span 1;
+}
+
+.fileList .fileItem {
+  width: 140px;
+  padding: 10px;
+}
+
+.fileList .fileItem button {
+  width: 100%;
+  margin-top: 5px;
+}

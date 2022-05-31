@@ -61,7 +61,7 @@ function App() {
             </div>
           </Content>
           <Footer style={{ textAlign: "center" }}>
-            Ecommerce ©2022 Created by Babyboo with <FontAwesomeIcon icon={faHeart} color={"pink"}/>
+            Ecommerce ©2022 Created by Babyboo with <FontAwesomeIcon icon={faHeart} color={"red"}/>
           </Footer>
         </Layout>
       </Layout>

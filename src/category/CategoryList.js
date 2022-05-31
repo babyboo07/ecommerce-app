@@ -1,28 +1,39 @@
-import { Button, Modal, Table } from "antd";
+import { Button, message, Modal, Table } from "antd";
 import { Link } from "react-router-dom";
-import cateMockData from "../Mock/testData.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan, faPen } from '@fortawesome/free-solid-svg-icons'
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import BreadcrumbCommon from "../Common/BreadcrumbCommon.js";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { destroyCate, getCate } from "../Redux/category/actions.js";
+import { getCateSelector } from "../Redux/category/selectors.js";
 
 
-const CategoryList = (props) => {
+const CategoryList = () => {
     const { confirm } = Modal;
+    const dispatch = useDispatch();
+    const cateData = useSelector(getCateSelector);
 
-    const showDeleteConfirm = () => {
+    const { cates } = cateData;
+
+    useEffect(() => {
+        dispatch(getCate());
+    }, [])
+
+    const showDeleteConfirm = (id) => {
         confirm({
-            title: 'Are you sure delete this task?',
+            title: 'Are you sure delete this task ' + id + '?',
             icon: <ExclamationCircleOutlined />,
             content: 'Some descriptions',
             okText: 'Yes',
             okType: 'danger',
             cancelText: 'No',
             onOk() {
-                console.log('OK');
+                dispatch(destroyCate({id:id}));
             },
             onCancel() {
-                console.log('Cancel');
+                message.error('This is an error message');
             },
         });
     }
@@ -35,12 +46,12 @@ const CategoryList = (props) => {
         },
         {
             title: 'Category Name',
-            dataIndex: 'categoryName',
+            dataIndex: 'cateName',
             key: 'categoryName',
         },
         {
             title: 'Parent Category',
-            dataIndex: 'parentCategory',
+            dataIndex: 'parentName',
             key: 'parentCategory',
         },
         {
@@ -49,7 +60,7 @@ const CategoryList = (props) => {
                 return (
                     <>
                         <Link className="btn mr-3" to={"/category/edit/" + val.id}><FontAwesomeIcon icon={faPen} color="#ffc107" /></Link>
-                        <Button className="btn mr-1" onClick={showDeleteConfirm}><FontAwesomeIcon icon={faTrashCan} color="#dc3545" /></Button>
+                        <Button className="btn mr-1" onClick={() => showDeleteConfirm(val.id)}><FontAwesomeIcon icon={faTrashCan} color="#dc3545" /></Button>
                     </>
                 )
             }
@@ -68,7 +79,7 @@ const CategoryList = (props) => {
                     </Button>
                 </Link>
             </div>
-            <Table rowKey={'id'} className="pt-3" dataSource={cateMockData} columns={columns} />
+            <Table rowKey={'id'} className="pt-3" dataSource={cates} columns={columns} />
         </div>
     );
 }

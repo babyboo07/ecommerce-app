@@ -64,7 +64,7 @@ export default (state = initialState, action) => {
         case DESTROY_USER_FAILURE:
             return {
                 ...state,
-                users: []
+                users: {}
             };
         case SHOW_USER:
             return {
@@ -78,7 +78,7 @@ export default (state = initialState, action) => {
         case SHOW_USER_FAILURE:
             return {
                 ...state,
-                detailUser: [],
+                detailUser: null,
             };
         case EDIT_USER:
             return {

@@ -1,10 +1,20 @@
 import { DatePicker, Form, Select } from "antd";
 import 'antd/dist/antd.css';
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getCategorylist } from "../Redux/product/actions";
+import { getProductSelector } from "../Redux/product/selectors";
 
 const { Option } = Select;
 
-const SreachCommon = ({dataList}) => {
-    let defaultVal = dataList.filter(i => {return i.isSelected});
+const SreachCommon = () => {
+    const dispatch = useDispatch();
+    const productData  = useSelector(getProductSelector);
+    const {categories} = productData;
+
+    useEffect(()=>{
+        dispatch(getCategorylist());
+    },[])
     return (
         <div>
             <Form
@@ -12,15 +22,15 @@ const SreachCommon = ({dataList}) => {
             >
                 <Form.Item
                     label='Category'
+                    name = 'cateId'
                 >
                     <Select
                         placeholder="Select Category"
                         allowClear
-                        defaultValue={defaultVal.length ? defaultVal[0].value : ''}
                     >
-                        {dataList !== undefined && dataList && dataList.length ? 
-                            dataList.map(i => {
-                                return <Option key={i.value} value={i.value}>{i.name}</Option>
+                        {categories ? 
+                            categories.map(i => {
+                                return <Option key={i.id} value={i.id}>{i.cateName}</Option>
                             }): null
                         }
                     </Select>

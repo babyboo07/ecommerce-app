@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, message, Modal, Table } from "antd";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import BreadcrumbCommon from "../Common/BreadcrumbCommon";
 import { faTrashCan, faPen } from '@fortawesome/free-solid-svg-icons'
 import { ExclamationCircleOutlined } from '@ant-design/icons';
@@ -13,7 +13,6 @@ import siteConfig from "../siteConfig";
 const AccountList = () => {
     const dispatch = useDispatch();
     const userData = useSelector(getUserSelector);
-    const navigate = useNavigate();
     
     const { users } = userData;
 

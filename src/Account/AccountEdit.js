@@ -6,7 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import accountData from "../Mock/accountData";
 import { getUserSelector } from "../Redux/admin/selectors";
 import { useDispatch, useSelector } from "react-redux";
-import { editUser, showUser } from "../Redux/admin/actions";
+import { editUser, showUser, showUserFailure } from "../Redux/admin/actions";
 import moment from "moment";
 import siteConfig from "../siteConfig";
 
@@ -55,7 +55,7 @@ const AccountEdit = () => {
     const onFinish = (values) => {
         values.image = img
         values.id = id;
-        dispatch(editUser(values,navigation));
+        dispatch(editUser(values, navigation));
     };
 
     const uploadButton = (
@@ -66,8 +66,11 @@ const AccountEdit = () => {
     );
 
     useEffect(() => {
-        dispatch(showUser({id:id}))
-    },[])
+        dispatch(showUser({ id: id }))
+        return () => {
+            dispatch(showUserFailure())
+        }
+    }, [])
 
     useEffect(() => {
         if (detailUser) {
@@ -75,7 +78,7 @@ const AccountEdit = () => {
         }
     }, [detailUser])
 
-    let userDetail = detailUser ? {...detailUser}: null;
+    let userDetail = detailUser ? { ...detailUser } : null;
 
     if (userDetail) {
         userDetail.dob = moment(userDetail.dob);
@@ -193,7 +196,8 @@ const AccountEdit = () => {
                             getValueFromEvent={normFile}
                             valuePropName="fileList"
                         >
-                            <Upload accept="image/*" beforeUpload={beforeUpload}
+                            <Upload accept="image/*"
+                                beforeUpload={beforeUpload}
                                 listType="picture-card"
                                 className="avatar-uploader"
                                 showUploadList={false}
@@ -201,7 +205,6 @@ const AccountEdit = () => {
                                 {img ? <img src={img} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
                             </Upload>
                         </Form.Item>
-
                         <Form.Item {...tailLayout}>
                             <Button className="btn-success" htmlType="submit">
                                 Submit

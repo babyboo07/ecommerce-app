@@ -1,17 +1,28 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrashCan, faPen } from '@fortawesome/free-solid-svg-icons'
-import { ExclamationCircleOutlined ,FormOutlined } from '@ant-design/icons';
+import { faTrashCan, faPen, faEye } from '@fortawesome/free-solid-svg-icons'
+import { ExclamationCircleOutlined, FormOutlined } from '@ant-design/icons';
 import { Button, Modal, Table } from "antd";
 import { Link } from "react-router-dom";
-import productData from "../Mock/productData"
 import BreadcrumbCommon from "../Common/BreadcrumbCommon";
+import { useDispatch, useSelector } from "react-redux";
+import { getProductSelector } from "../Redux/product/selectors";
+import { useEffect } from "react";
+import { destroyProduct, getProduct } from "../Redux/product/actions";
 
 const ProductList = () => {
     const { confirm } = Modal;
+    const dispatch = useDispatch();
+    const productData = useSelector(getProductSelector);
 
-    const showDeleteConfirm = () => {
+    const { product } = productData;
+
+    useEffect(() => {
+        dispatch(getProduct());
+    }, [])
+
+    const showDeleteConfirm = (id) => {
         confirm({
-            title: 'Are you sure delete this task?',
+            title: 'Are you sure delete this task ' + id + '?',
             icon: <ExclamationCircleOutlined />,
             content: 'Some descriptions',
             okText: 'Yes',
@@ -21,7 +32,7 @@ const ProductList = () => {
                 console.log('Cancel');
             },
             onOk() {
-                console.log('OK');
+                dispatch(destroyProduct({ id: id }))
             },
         });
     }
@@ -34,7 +45,7 @@ const ProductList = () => {
         },
         {
             title: 'Product Name',
-            dataIndex: 'productName',
+            dataIndex: 'name',
             key: 'id',
         },
         {
@@ -49,7 +60,7 @@ const ProductList = () => {
         },
         {
             title: 'Category',
-            dataIndex: 'categoryId',
+            dataIndex: 'cateName',
             key: 'id',
         },
         {
@@ -61,15 +72,30 @@ const ProductList = () => {
             title: 'Description',
             dataIndex: 'description',
             key: 'id',
+            render: (value) => {
+                if (value !== undefined && value) {
+                    return (
+                        <span style={{ wordBreak: 'break-word' }}>
+                            {value.length > 150 ? value.substring(0, 149) : value}
+                        </span>
+                    )
+                }
+                return null;
+            }
+        },
+        {
+            title: 'Evaluate',
+            dataIndex: 'evaluate',
+            key: 'id',
         },
         {
             title: "Action",
             render: (val) => {
                 return (
                     <>
+                        <Link className="btn mr-3" to={"/product/detail/" + val.id}><FontAwesomeIcon icon={faEye} color="pink" /></Link>
                         <Link className="btn mr-3" to={"/product/edit/" + val.id}><FontAwesomeIcon icon={faPen} color="#ffc107" /></Link>
-                        <Link className="btn mr-3" to={"/product/detail/" + val.id}><FormOutlined  color="#ffc107" /></Link>
-                        <Button className="btn mr-1" onClick={showDeleteConfirm}><FontAwesomeIcon icon={faTrashCan} color="#dc3545" /></Button>
+                        <Button className="btn mr-1" onClick={() => showDeleteConfirm(val.id)}><FontAwesomeIcon icon={faTrashCan} color="#dc3545" /></Button>
                     </>
                 )
             }
@@ -88,7 +114,7 @@ const ProductList = () => {
                 </Link>
             </div>
             <div>
-                <Table columns={col} rowKey={'id'} className="pt-3" dataSource={productData} />
+                <Table columns={col} rowKey={'id'} className="pt-3" dataSource={product} />
             </div>
         </div>
     );

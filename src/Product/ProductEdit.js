@@ -1,9 +1,15 @@
-import { Button, Form, Input, Select, Upload } from "antd";
+import { Button, Form, Input, Select } from "antd";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import BreadcrumbCommon from "../Common/BreadcrumbCommon";
-import productData from "../Mock/productData";
 import { PlusOutlined } from '@ant-design/icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUpload } from "@fortawesome/free-solid-svg-icons";
+import { v4 as uuid } from 'uuid';
+import { useDispatch, useSelector } from "react-redux";
+import { editProduct, getCategorylist, getDetailProduct } from "../Redux/product/actions";
+import { getProductSelector } from "../Redux/product/selectors";
+import { useParams } from "react-router-dom";
+import siteConfig from "../siteConfig";
 
 const { Option } = Select;
 
@@ -15,17 +21,65 @@ const normFile = (e) => {
     return e && e.fileList;
 };
 
-const ProductEdit = () => {
-    const onFinish = (values) => {
-        console.log('Success:', values);
-    };
+const ProductCreate = () => {
+    let [isError, setIsError] = useState(false);
+    const [imgList, setImgList] = useState([]);
+    const dispatch = useDispatch();
+    const { id } = useParams();
+    const productData = useSelector(getProductSelector);
+    const [categoryList, setCategoryList] = useState(null);
+    const { categories } = productData;
+    const { detailProduct } = productData;
+
+    useEffect(() => {
+        dispatch(getCategorylist());
+        dispatch(getDetailProduct({ id: id }));
+    }, [])
 
     const onFinishFailed = (errorInfo) => {
+        console.log(!imgList || imgList.length === 0)
+        if (!imgList || imgList.length === 0) {
+            setIsError(true)
+        } else {
+            setIsError(false)
+        }
         console.log('Failed:', errorInfo);
     };
 
     const tailLayout = {
         wrapperCol: { offset: 14, span: 16 },
+    };
+
+    const beforeUpload = (file) => {
+        const isImg = file.type.includes('image');
+
+        if (isImg) {
+            var reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = function () {
+                let newImgList = [...imgList];
+                newImgList.push({
+                    id: file.uid,
+                    name: file.name,
+                    src: reader.result
+                })
+                setImgList(newImgList);
+            }
+        }
+
+        return false;
+    }
+
+    const onFinish = (values) => {
+        if (!imgList || imgList.length === 0) {
+            setIsError(true)
+            return
+        }
+        setIsError(false)
+        values.images = imgList.map(i => { return i.src });
+        values.id = id;
+        values.cateId = cateId;
+        dispatch(editProduct(values));
     };
 
     const uploadButton = (
@@ -35,31 +89,35 @@ const ProductEdit = () => {
         </div>
     );
 
-    const [img, setImg] = useState(null);
+    const handleSelectFile = (files) => {
+        let fileList = [];
+        let fileData = [];
+        for (let file of files) {
+            if (file.type.includes('image')) {
+                fileList.push(file);
+            }
+        }
 
-    const [product, setProduct] = useState(null);
-
-    const beforeUpload = (file) => {
-        const isImg = file.type.includes('image');
-
-        if (isImg) {
+        fileList.map((file, index) => {
             var reader = new FileReader();
             reader.readAsDataURL(file);
             reader.onload = function () {
-                setImg(reader.result)
-            };
-        } else {
-            setImg(null)
-        }
+                fileData.push({
+                    id: uuid(),
+                    name: file.name,
+                    src: reader.result
+                })
 
-        return false;
+                if (index === fileList.length - 1) {
+                    setImgList(fileData);
+                }
+            }
+        })
     }
 
-    const { id } = useParams();
-
-    useEffect(() => {
-        setProduct(productData.filter(p => { return p.id === parseInt(id) })[0]);
-    })
+    const removeImage = (id) => {
+        setImgList(imgList.filter(i => i.id !== id))
+    }
 
     return (
         <div>
@@ -67,33 +125,33 @@ const ProductEdit = () => {
                 <BreadcrumbCommon header={'Product'} title={'Edit'} />
             </div>
             <div className="pt-4">
-                {product !== undefined && product && product.id !== undefined ?
-                    <Form
+                {detailProduct ?
+                    < Form
                         name="basic"
                         labelCol={{ span: 6 }}
                         wrapperCol={{ span: 10 }}
-                        initialValues={product}
+                        initialValues={detailProduct}
                         onFinish={onFinish}
                         onFinishFailed={onFinishFailed}
                         autoComplete="off"
                     >
                         <Form.Item
                             label="Product Name"
-                            name="productName"
+                            name="name"
                             rules={[{
                                 required: true, message: "Please input your Product Name!"
                             }]}
                         >
                             <Input />
                         </Form.Item>
-                        <Form.Item name="categoryId" label="Category" rules={[{ required: true, message: 'Plesse select your Category' }]}>
+                        <Form.Item name="cateId" label="Category" rules={[{ required: true, message: 'Plesse select your Category' }]}>
                             <Select
                                 placeholder="Select Category"
-                                allowClear
+                                onChange={(e) => setCategoryList(e)}
                             >
-                                <Option value="male">male</Option>
-                                <Option value="female">female</Option>
-                                <Option value="other">other</Option>
+                                {categories ?
+                                    categories.map((cl) => { return (<Option key={cl.id} value={cl.id} >{cl.cateName}</Option>) }) : (<></>)
+                                }
                             </Select>
                         </Form.Item>
                         <Form.Item
@@ -107,21 +165,21 @@ const ProductEdit = () => {
                             <Input.TextArea />
                         </Form.Item>
                         <Form.Item
-                            label="Price"
-                            name="price"
-                            rules={[{
-                                required: true,
-                                message: 'Price is required'
-                            }]}
-                        >
-                            <Input />
-                        </Form.Item>
-                        <Form.Item
                             label="Quantity"
                             name="qty"
                             rules={[{
                                 required: true,
                                 message: 'Quantity is required'
+                            }]}
+                        >
+                            <Input />
+                        </Form.Item>
+                        <Form.Item
+                            label="Price"
+                            name="price"
+                            rules={[{
+                                required: true,
+                                message: 'Price is required'
                             }]}
                         >
                             <Input />
@@ -138,18 +196,39 @@ const ProductEdit = () => {
                         </Form.Item>
                         <Form.Item label="Image"
                             name="image"
-                            rules={[{
-                                required: true, message: "Input Input something bro!!"
-                            }]}
                             getValueFromEvent={normFile}
-                            valuePropName="image"
+                            valuePropName="fileList"
                         >
-                            <Upload accept="image/*" beforeUpload={beforeUpload}
-                                listType="picture-card"
-                                className="avatar-uploader"
-                                showUploadList={false}>
-                                {product && product.image ? <img src={product.image} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
-                            </Upload>
+                            <Input
+                                accept="image/*"
+                                type="file"
+                                id="product-img"
+                                multiple
+                                onChange={(e) => {
+                                    handleSelectFile(e.target.files);
+                                }}
+                                style={{ display: 'none' }}
+                            />
+                            <Button onClick={() => {
+                                document.getElementById('product-img').click();
+                            }}><FontAwesomeIcon icon={faUpload} /></Button>
+
+                            {imgList && imgList.length ?
+                                <ul className="fileList">
+                                    {imgList.map(i => {
+                                        return (
+                                            <li key={i.id} className="fileItem">
+                                                <img src={i.src} alt={i.name} />
+                                            </li>
+                                        )
+                                    })}
+                                </ul> : null
+                            }
+                            {
+                                isError && !imgList.length ? <div className="ant-form-item-explain">
+                                    <div role="alert" className="ant-form-item-explain-error">Please select Image</div>
+                                </div> : null
+                            }
                         </Form.Item>
                         <Form.Item {...tailLayout}>
                             <Button className="btn-success" htmlType="submit">
@@ -159,8 +238,8 @@ const ProductEdit = () => {
                     </Form> : null
                 }
             </div>
-        </div>
+        </div >
     );
 }
 
-export default ProductEdit;
+export default ProductCreate;

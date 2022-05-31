@@ -1,14 +1,28 @@
 import { Button, Form, Input, Select } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import BreadcrumbCommon from "../Common/BreadcrumbCommon.js";
+import { addCate, getParentCate } from "../Redux/category/actions.js";
+import { getCateSelector } from "../Redux/category/selectors.js";
 
 const { Option } = Select;
 
 const CategoryCreate = (props) => {
-    const [level, setLevel] = useState();
+    const [level, setLevel] = useState(1);
+    const [form] = Form.useForm()
+    const [parentCategory, setParentCategory] = useState(null);
+    const cateData = useSelector(getCateSelector);
+    const dispatch = useDispatch();
+    const { parentCate } = cateData;
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        dispatch(getParentCate());
+    }, []);
 
     const onFinish = (values) => {
-        console.log('Success:', values);
+        dispatch(addCate(values , navigate));
     };
 
     const onFinishFailed = (errorInfo) => {
@@ -19,6 +33,30 @@ const CategoryCreate = (props) => {
         wrapperCol: { offset: 14, span: 16 },
     };
 
+    const renderParentCategory = () => {
+        if (level === undefined || !level || level === 1) return null;
+        let data = parentCate.filter(c=> c.level === level - 1);
+
+        return (
+            <Form.Item name="parent" label="Parent" rules={[{ required: true, message: 'Plesse select cate\'s Parent' }]}>
+                <Select
+                    placeholder="Select a cate's Parent"
+                    onChange={(e) => setParentCategory(e)}
+                >
+                    {
+                        data.map((pc) => {
+                            if (pc.level === level - 1) {
+                                return (<Option key={pc.id} value={`${pc.id}`} >{pc.cateName}</Option>)
+                            }
+
+                            return null;
+                        })
+                    }
+                </Select>
+            </Form.Item>
+        )
+    }
+
     return (
         <div>
             <div>
@@ -26,46 +64,40 @@ const CategoryCreate = (props) => {
             </div>
             <div className="pt-4">
                 <Form
+                    form={form}
                     name="basic"
                     labelCol={{ span: 6 }}
                     wrapperCol={{ span: 10 }}
-                    initialValues={{ remember: true }}
                     onFinish={onFinish}
                     onFinishFailed={onFinishFailed}
                     autoComplete="off"
                 >
                     <Form.Item
                         label="Category Name"
-                        name="categoryName"
+                        name="cateName"
                         rules={[{
                             required: true, message: "Please input your Category Name!"
                         }]}
                     >
                         <Input />
                     </Form.Item>
-                    <Form.Item name="level" label="Level" rules={[{ required: true ,message:'Plesse select your Parent' }]}>
+                    <Form.Item name="level" label="Level" rules={[{ required: true, message: 'Plesse select your level' }]}>
                         <Select
                             placeholder="Select a option and change input text above"
-                            allowClear
-                            onChange={(e) => setLevel(e)}
+                            onChange={(e) => {
+                                setParentCategory(null);
+                                form.setFieldsValue({
+                                    parent: null
+                                })
+                                setLevel(e)
+                            }}
                         >
                             <Option value={1}>1</Option>
                             <Option value={2}>2</Option>
                             <Option value={3}>3</Option>
                         </Select>
                     </Form.Item>
-                    <Form.Item name="parent" label="Parent" rules={[{ required: true ,message:'Plesse select your Parent' }]}>
-                        <Select
-                            disabled={!level || level === 1? true: false}
-                            placeholder="Select a option and change input text above"
-                            allowClear
-                            // value={cateMockData.parentCategory}
-                        >
-                            <Option value="male">male</Option>
-                            <Option value="female">female</Option>
-                            <Option value="other">other</Option>
-                        </Select>
-                    </Form.Item>
+                    {renderParentCategory()}
                     <Form.Item {...tailLayout}>
                         <Button className="btn-success" htmlType="submit">
                             Submit
