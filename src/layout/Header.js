@@ -1,12 +1,17 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Dropdown, Menu,  Layout, Space } from "antd";
+import { Dropdown, Menu, Layout, Space } from "antd";
 import "../css/Header.css"
 import { faKey, faArrowAltCircleRight, faFaceDizzy, faAlignLeft, faInfo } from '@fortawesome/free-solid-svg-icons'
 import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { logout } from "../Redux/auth/actions";
 
 const { Header } = Layout;
 
 const HeaderLayout = (props) => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     useEffect(() => {
         let el = document.getElementById('root');
@@ -27,25 +32,29 @@ const HeaderLayout = (props) => {
             items={[
                 {
                     label: (
-                        <a target="_blank" rel="noopener noreferrer" href="https://www.antgroup.com">
-                            <FontAwesomeIcon icon={faInfo} className={"px-2"}/>
+                        <a className="menu-item" target="_blank" rel="noopener noreferrer" href="#">
+                            <FontAwesomeIcon icon={faInfo} className={"px-2"} />
                             My information
                         </a>
                     ),
                 },
                 {
                     label: (
-                        <a target="_blank" rel="noopener noreferrer" href="/changepass">
-                            <FontAwesomeIcon icon={faKey} className={"px-2"}/>
+                        <a className='menu-item' target="_blank" rel="noopener noreferrer" href="/changepass">
+                            <FontAwesomeIcon icon={faKey} className={"px-2"} />
                             Change passwork
                         </a>
                     ),
                 },
                 {
                     label: (
-                        <a target="_blank" rel="noopener noreferrer" href="https://www.luohanacademy.com">
-                            <FontAwesomeIcon icon={faArrowAltCircleRight} className={"px-2"}/>
-                            Logout    
+                        <a className='menu-item' target="_blank" rel="noopener noreferrer" onClick={() => {
+                            dispatch(logout());
+                            localStorage.removeItem("token");
+                            navigate("/login")
+                        }}>
+                            <FontAwesomeIcon icon={faArrowAltCircleRight} className={"px-2"} />
+                            Logout
                         </a>
                     ),
                 },
@@ -60,8 +69,8 @@ const HeaderLayout = (props) => {
         >
             <div className="col-12 row">
                 <div className="col-7">
-                    <FontAwesomeIcon className="ms-3" 
-                        style={{ cursor: 'pointer' }} 
+                    <FontAwesomeIcon className="ms-3"
+                        style={{ cursor: 'pointer' }}
                         icon={faAlignLeft} size="lg" onClick={() => props.setIsCollapse(!props.isCollapse)} />
                 </div>
                 <div className="col-5 bd-highlight text-end">

@@ -55,13 +55,14 @@ function* addUsers(action) {
         if (response) {
             message.success('This is a success message');
             yield put(addUserSuccess(response));
-            action.navigate("/account/list");
+            action.navigate(action.path);
         }
     } catch (e) {
         message.error('This is an error message');
         yield put(addUserFailure())
     }
 }
+
 
 function* showUsers(data) {
     try {

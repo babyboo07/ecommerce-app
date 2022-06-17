@@ -50,11 +50,12 @@ export const destroyUserFailure= (payload) =>({
     payload
 });
 
-export const addUser = (payload, navigate) => {
+export const addUser = (payload, navigate, path) => {
     return ({
         type:ADD_USER,
         payload,
-        navigate: navigate
+        navigate: navigate,
+        path: path
     })
 };
 

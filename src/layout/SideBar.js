@@ -35,7 +35,7 @@ const SideBar = (props) => {
                 selectedKeys={[locationSplit.length > 1 ? locationSplit[1].toLocaleLowerCase() : '']}
             >
                 <Menu.Item key="dashboard">
-                    <NavLink to="/dashboard">
+                    <NavLink to="/">
                         <AreaChartOutlined />
                         <span>Dashboard</span>
                     </NavLink>
