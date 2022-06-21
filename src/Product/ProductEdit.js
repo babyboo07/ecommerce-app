@@ -36,14 +36,16 @@ const ProductCreate = () => {
         dispatch(getDetailProduct({ id: id }));
     }, [])
 
+    useEffect(() => {
+        setImgList(detailProduct?.images);
+    }, [detailProduct]);
+
     const onFinishFailed = (errorInfo) => {
-        console.log(!imgList || imgList.length === 0)
         if (!imgList || imgList.length === 0) {
             setIsError(true)
         } else {
             setIsError(false)
         }
-        console.log('Failed:', errorInfo);
     };
 
     const tailLayout = {
@@ -61,7 +63,7 @@ const ProductCreate = () => {
                 newImgList.push({
                     id: file.uid,
                     name: file.name,
-                    src: reader.result
+                    path: reader.result
                 })
                 setImgList(newImgList);
             }
@@ -76,9 +78,8 @@ const ProductCreate = () => {
             return
         }
         setIsError(false)
-        values.images = imgList.map(i => { return i.src });
+        values.images = imgList.map(i => { return i.path });
         values.id = id;
-        values.cateId = cateId;
         dispatch(editProduct(values));
     };
 
@@ -105,7 +106,7 @@ const ProductCreate = () => {
                 fileData.push({
                     id: uuid(),
                     name: file.name,
-                    src: reader.result
+                    path: reader.result
                 })
 
                 if (index === fileList.length - 1) {
@@ -218,7 +219,7 @@ const ProductCreate = () => {
                                     {imgList.map(i => {
                                         return (
                                             <li key={i.id} className="fileItem">
-                                                <img src={i.src} alt={i.name} />
+                                                <img src={`${i.id > 0 ? siteConfig.apiRoot: ''}${i.path}`} alt={i.name} />
                                             </li>
                                         )
                                     })}
