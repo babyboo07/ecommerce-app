@@ -3,7 +3,6 @@ import BreadcrumbCommon from "../Common/BreadcrumbCommon";
 import { PlusOutlined } from '@ant-design/icons';
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import accountData from "../Mock/accountData";
 import { getUserSelector } from "../Redux/admin/selectors";
 import { useDispatch, useSelector } from "react-redux";
 import { editUser, showUser, showUserFailure } from "../Redux/admin/actions";

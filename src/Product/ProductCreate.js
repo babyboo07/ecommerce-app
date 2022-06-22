@@ -76,13 +76,6 @@ const ProductCreate = () => {
         dispatch(addProduct(values));
     };
 
-    const uploadButton = (
-        <div>
-            <PlusOutlined />
-            <div style={{ marginTop: 8 }}>Upload</div>
-        </div>
-    );
-
     const handleSelectFile = (files) => {
         let fileList = [];
         let fileData = [];
