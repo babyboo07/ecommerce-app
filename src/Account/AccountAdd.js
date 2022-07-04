@@ -49,7 +49,7 @@ const AccountAdd = () => {
 
     const onFinish = (values) => {
         values.image = img;
-        dispatch(addUser(values, navigation, '/users/list'));
+        dispatch(addUser(values, navigation, '/account/list'));
     };
 
     const uploadButton = (
