@@ -52,6 +52,10 @@ const ProductList = () => {
             title: 'Price',
             dataIndex: 'price',
             key: 'id',
+            render:(val)=>{
+                return <span>{val.toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}&#8363;</span>
+              }
         },
         {
             title: 'Quantity',

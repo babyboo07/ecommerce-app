@@ -19,6 +19,10 @@ export const EDIT_USER = 'EDIT_USER';
 export const EDIT_USER_SUCCESS = 'EDIT_USER_SUCCESS';
 export const EDIT_USER_FAILURE = 'EDIT_USER_FAILURE';
 
+export const EDIT_PASSWORD = 'EDIT_PASSWORD';
+export const EDIT_PASSWORD_SUCCESS = 'EDIT_PASSWORD_SUCCESS';
+export const EDIT_PASSWORD_FAILURE = 'EDIT_PASSWORD_FAILURE';
+
 export const getUser = (payload) =>({
     type:GET_USER,
     payload
@@ -99,5 +103,24 @@ export const editUserSuccess =(payload)=>({
 
 export const editUserFailure = (payload)=>({
     type:EDIT_USER_FAILURE,
+    payload
+});
+
+export const editPass = (payload, navigate,path) => {
+    return({
+        type: EDIT_PASSWORD,
+        navigate: navigate,
+        path: path,
+        payload
+    })
+};
+
+export const editPassSuccess = (payload) => ({
+    type: EDIT_PASSWORD_SUCCESS,
+    payload
+});
+
+export const editPassFailure = (payload) => ({
+    type: EDIT_PASSWORD_FAILURE,
     payload
 });

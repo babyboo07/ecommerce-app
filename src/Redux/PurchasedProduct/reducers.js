@@ -5,6 +5,8 @@ import {
   DESTROY_PURCHASED_PRODUCT_SUCCESS,
   EDIT_PURCHASED_PRODUCT_FAILURE,
   EDIT_PURCHASED_PRODUCT_SUCCESS,
+  EDIT_STATUS_FAILURE,
+  EDIT_STATUS_SUCCESS,
   GET_ALL_ORDER_FAILURE,
   GET_ALL_ORDER_SUCCESS,
   GET_PURCHASED_PRODUCT_FAILURE,
@@ -16,7 +18,7 @@ import {
 const initialState = {
   pending: false,
   order:{},
-  purchasedPro: [],
+  purchasedPro: null,
   detailPurchasedPro: null,
   destroyPurchasedPro: null,
 };
@@ -73,6 +75,14 @@ export default (state = initialState, action) => {
         order: action.payload
       };
     case GET_ALL_ORDER_FAILURE:
+      return{
+        ...state,
+      }
+    case EDIT_STATUS_SUCCESS:
+      return{
+        ...state,
+      }
+    case EDIT_STATUS_FAILURE:
       return{
         ...state,
       }

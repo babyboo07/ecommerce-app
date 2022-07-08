@@ -31,7 +31,7 @@ function* authenticate() {
         const response = yield call(getAuth);
         yield put(authenticateSuccess());
     } catch (e) {
-
+        console.log(e);
         yield put(authenticateFailure());
     }
 }
@@ -43,10 +43,11 @@ function* login(action) {
     try {
         const response = yield call(loginAction, action.payload);
         localStorage.setItem("token", response.access_token)
+        localStorage.setItem("user", JSON.stringify(response.user))
         yield put(loginSuccess());
         action.navigate("/");
     } catch (e) {
-
+        console.log(e);
         yield put(loginFailure());
     }
 }

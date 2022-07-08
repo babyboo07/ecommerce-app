@@ -22,6 +22,10 @@ export const GET_ALL_ORDER = "GET_ALL_ORDER";
 export const GET_ALL_ORDER_SUCCESS = "GET_ALL_ORDER_SUCCESS";
 export const GET_ALL_ORDER_FAILURE = "GET_PURCHASED_PRODUCT_FAILURE";
 
+export const EDIT_STATUS = "EDIT_STATUS";
+export const EDIT_STATUS_SUCCESS = "EDIT_STATUS_SUCCESS";
+export const EDIT_STATUS_FAILURE = "EDIT_STATUS_FAILURE";
+
 export const getPurchasedProduct = (payload) => ({
   type: "GET_PURCHASED_PRODUCT",
   payload,
@@ -116,4 +120,19 @@ export const getAllOrdersSuccess = (payload) => ({
 export const getAllOrdersFailure = (payload) => ({
     type: "GET_ALL_ORDER_FAILURE",
     payload
+});
+
+export const editStatus = (payload) => ({ 
+  type: "EDIT_STATUS",
+  payload,
+});
+
+export const editStatusSuccess = (payload) => ({
+  type: "EDIT_STATUS_SUCCESS",
+  payload
+});
+
+export const editStatusFailure = (payload) => ({
+  type:"EDIT_STATUS_FAILURE",
+  payload
 });

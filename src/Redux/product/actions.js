@@ -82,9 +82,10 @@ export const getCategoryListFailure =(payload) =>({
     payload
 });
 
-export const addProduct = (payload) =>({
+export const addProduct = (payload, navigate) =>({
     type:'ADD_PRODUCT',
-    payload
+    payload,
+    navigate : navigate
 });
 
 export const addProductSuccess =(payload) =>({
@@ -97,9 +98,10 @@ export const addProductFailure =(payload) =>({
     payload
 });
 
-export const editProduct = (payload) =>({
+export const editProduct = (payload, navigate) =>({
     type:'EDIT_PRODUCT',
-    payload
+    payload,
+    navigate : navigate
 });
 
 export const editProductSuccess =(payload) =>({

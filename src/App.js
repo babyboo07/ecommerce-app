@@ -65,7 +65,7 @@ function App() {
                   <Route path='/account/list' element={<AccountList />} />
                   <Route path='/account/edit/:id' element={<AccountEdit />} />
                   <Route path='/account/add' element={<AccountAdd />} />
-                  <Route path='/changepass' element={<ChangePassword />} />
+                  <Route path='/changepass/:id' element={<ChangePassword />} />
                   <Route path='/information' element={<Information />} />
                 </Routes>
               </div>

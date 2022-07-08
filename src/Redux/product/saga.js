@@ -84,22 +84,28 @@ function* getCateList(data) {
     }
 }
 
-function* addProduct(data) {
+function* addProduct(action) {
     try {
-        const response = yield call(addPro, data.payload);
-        message.success('This is a success message');
-        yield put(addProductSuccess(response));
+        const response = yield call(addPro, action.payload);
+        if(response){
+            yield put(addProductSuccess(response));
+            message.success('This is a success message');
+            action.navigate('/product/list');
+        }
     } catch (e) {
         message.error('This is an error message');
         yield put(addProductFailure());
     }
 }
 
-function* editProduct(data) {
+function* editProduct(action) {
     try {
-        const response = yield call(editPro, data.payload);
-        yield put(editProductSuccess(response));
-        message.success('This is a success message');
+        const response = yield call(editPro, action.payload);
+        if(response){
+            yield put(editProductSuccess(response));
+            message.success('This is a success message');
+            action.navigate('/product/list');
+        }
     } catch (e) {
         message.error('This is an error message');
         yield put(editProductFailure());

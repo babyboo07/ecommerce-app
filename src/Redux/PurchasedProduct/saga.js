@@ -1,11 +1,13 @@
 import { message } from "antd";
 import { all, call, put, takeLatest } from "redux-saga/effects";
 import SuperFetch from "../../services/SuperFetch";
-import { deleteCart } from "../cart/actions";
 import {
   addPurchasedProductFailure,
   addPurchasedProductSuccess,
   ADD_PURCHASED_PRODUCT,
+  editStatusFailure,
+  editStatusSuccess,
+  EDIT_STATUS,
   getAllOrdersFailure,
   getAllOrdersSuccess,
   getPurchasedProductFailure,
@@ -19,12 +21,16 @@ const addPurchasedPro = (data) => {
 };
 
 const getPurchasedProduct = (data) => {
-  return new SuperFetch().get(`/api/purchasedProducts/userid${data.userId}/status${data.status}`);
+  return new SuperFetch().get(`/api/purchasedProducts/orderId/${data}`);
 };
 
 const getall = (data) => {
-  return new SuperFetch().get(`/api/purchasedProducts/${data.id}`);
+  return new SuperFetch().get(`/api/purchasedProducts/status/${data}`);
 };
+
+const updateOrder = (data)=>{
+  return new SuperFetch().put("/api/purchasedProducts/edit/"+ data , data);
+}
 
 function* getAllOrder(data) {
   try {
@@ -57,8 +63,8 @@ function* addPurchasedProduct(action) {
       yield put(addPurchasedProductSuccess(response));
       message.success("Đặt hàng thành công");
       localStorage.removeItem("orderList");
-      const payload = { id: action.payload.cartId };
-      yield put(deleteCart(payload));
+      // const payload = { id: action.payload.cartId };
+      // yield put(deleteCart(payload));
       action.navigate(action.path);
     }
   } catch (e) {
@@ -68,11 +74,26 @@ function* addPurchasedProduct(action) {
   }
 }
 
+function* editStatusOrder(data) {
+  try {
+    const res = yield call(updateOrder,data.payload);
+    if(res){
+      yield put(editStatusSuccess(res));
+      message.success("Cập nhật đơn hàng thành công");
+    }
+  } catch (e) {
+    message.error("Lỗi trong việc cập nhật đơn hàng");
+    console.log(e);
+    yield put(editStatusFailure());
+  }
+}
+
 function* PurchasedProSaga() {
   yield all([
     takeLatest(ADD_PURCHASED_PRODUCT, addPurchasedProduct),
     takeLatest(GET_PURCHASED_PRODUCT, getAllPurchasedPro),
-    takeLatest(GET_ALL_ORDER , getAllOrder)
+    takeLatest(GET_ALL_ORDER , getAllOrder),
+    takeLatest(EDIT_STATUS , editStatusOrder),
   ]);
 }
 

@@ -8,7 +8,7 @@ import { v4 as uuid } from 'uuid';
 import { useDispatch, useSelector } from "react-redux";
 import { editProduct, getCategorylist, getDetailProduct } from "../Redux/product/actions";
 import { getProductSelector } from "../Redux/product/selectors";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import siteConfig from "../siteConfig";
 
 const { Option } = Select;
@@ -30,6 +30,7 @@ const ProductCreate = () => {
     const [categoryList, setCategoryList] = useState(null);
     const { categories } = productData;
     const { detailProduct } = productData;
+    const navigate = useNavigate();
 
     useEffect(() => {
         dispatch(getCategorylist());
@@ -79,8 +80,8 @@ const ProductCreate = () => {
         }
         setIsError(false)
         values.images = imgList.map(i => { return i.path });
-        values.id = id;
-        dispatch(editProduct(values));
+        values.id = parseInt(id);
+        dispatch(editProduct(values , navigate));
     };
 
     const uploadButton = (

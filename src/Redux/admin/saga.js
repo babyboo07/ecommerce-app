@@ -8,8 +8,11 @@ import {
     destroyUserFailure,
     destroyUserSuccess,
     DESTROY_USER,
+    editPassFailure,
+    editPassSuccess,
     editUserFailure,
     editUserSuccess,
+    EDIT_PASSWORD,
     EDIT_USER,
     getUser,
     getUserFailure,
@@ -38,6 +41,10 @@ const destroyUser = (data) => {
 
 const editUser = (data) => {
     return new SuperFetch().post('/api/users/edit/' + data.id, data)
+}
+
+const editPass = (data) => {
+    return new SuperFetch().post('api/users/editpassword/' + data.id, data)
 }
 
 function* getUsers(data) {
@@ -95,13 +102,28 @@ function* editUsers(action) {
     }
 }
 
+function* editPassword (action){
+    try {
+        const response = yield call(editPass, action.payload);
+        if(response){
+            yield put(editPassSuccess(response));
+            message.success('This is a success message');
+            action.navigate(action.path);
+        }
+    } catch (error) {
+        message.error('This is an error message');
+        yield put(editPassFailure)
+    }
+}
+
 function* UserSaga() {
     yield all([
         takeLatest(GET_USER, getUsers),
         takeLatest(ADD_USER, addUsers),
         takeLatest(SHOW_USER, showUsers),
         takeLatest(DESTROY_USER, destroyUsers),
-        takeLatest(EDIT_USER, editUsers)
+        takeLatest(EDIT_USER, editUsers),
+        takeLatest(EDIT_PASSWORD,editPassword)
     ])
 }
 
