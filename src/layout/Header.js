@@ -23,7 +23,7 @@ const HeaderLayout = (props) => {
   const auth = useSelector(getAuthSelector);
 
   useEffect(() => {
-    setUser(localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null);
+    setUser(localStorage.getItem("user") ? (localStorage.getItem("user")) : null);
   }, [auth]);
 
   useEffect(() => {

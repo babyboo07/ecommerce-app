@@ -29,7 +29,7 @@ const getall = (data) => {
 };
 
 const updateOrder = (data)=>{
-  return new SuperFetch().put("/api/purchasedProducts/edit/"+ data , data);
+  return new SuperFetch().post("/api/purchasedProducts/edit/"+ data.orderId , data);
 }
 
 function* getAllOrder(data) {
@@ -76,6 +76,7 @@ function* addPurchasedProduct(action) {
 
 function* editStatusOrder(data) {
   try {
+    console.log(data);
     const res = yield call(updateOrder,data.payload);
     if(res){
       yield put(editStatusSuccess(res));

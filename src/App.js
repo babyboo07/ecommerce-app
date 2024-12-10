@@ -39,7 +39,7 @@ function App() {
 
   return (
     <BrowserRouter>
-      {auth.isAuth ?
+      {/* {auth.isAuth ? */}
         <Layout>
           <SideBar isCollapse={isCollapse} ></SideBar>
           <Layout>
@@ -76,12 +76,12 @@ function App() {
           </Layout>
         </Layout> :
 
-        <Routes>
+        {/* <Routes>
           <Route path='*' element={<Navigate to="/login" />} />
           <Route path='/login' element={<Login />} />
           <Route path='/signup' element={<Signup />} />
         </Routes>
-      }
+      } */}
     </BrowserRouter>
   );
 }

@@ -64,7 +64,7 @@ const OrderList = () => {
           case 1:
             return (
               <>
-                <Link className="btn mr-1" to={""} onClick={onClickCancel(val)}>
+                <Link className="btn mr-1" to={""} onClick={()=>onClickCancel(val)}>
                   <FontAwesomeIcon icon={faXmark} color="red" />
                 </Link>
                 <Link className="btn mr-1" to={""}>
@@ -124,7 +124,10 @@ const OrderList = () => {
 
   const onClickCancel=(data)=>{
     data.status = 4;
-    // dispatch(editStatus(data));
+
+    // const Id= data.orderId;
+    console.log(data);
+    dispatch(editStatus({orderId: data.orderId, status: 4}));
   }
 
   return (
